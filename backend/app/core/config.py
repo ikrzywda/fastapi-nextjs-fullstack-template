@@ -3,8 +3,8 @@ from pydantic import BaseSettings, PostgresDsn, validator
 
 
 class Settings(BaseSettings):
+    API_V1_STR: str = "/api/v1"
     PROJECT_NAME: str = "FastAPI Template"
-
     POSTGRES_SERVER: str
     POSTGRES_USER: str
     POSTGRES_PASSWORD: str

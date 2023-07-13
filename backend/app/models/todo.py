@@ -18,13 +18,7 @@ class TodoUpdate(BaseModel):
     description: Optional[str] = None
 
 
-class Todo(TodoBase):
-    id: int
-    completed_on: Optional[datetime] = None
-    created_on: datetime
-
-
-class TodoDBModel(TodoBase, SQLModel, table=True):
+class Todo(TodoBase, SQLModel, table=True):
     __tablename__ = "todos"
     # sequence as primary key,
     # more info at
