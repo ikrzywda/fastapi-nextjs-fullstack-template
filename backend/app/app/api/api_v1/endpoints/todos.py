@@ -1,9 +1,12 @@
 from typing import List
-from fastapi import APIRouter, Depends, HTTPException
-from sqlmodel import Session, select
-from app.core.db import get_session
 
-from models.todo import Todo, TodoCreate
+from fastapi import APIRouter, Depends, HTTPException
+from app.models.todo import Todo, TodoCreate
+from sqlmodel import Session
+
+from app.core.db import get_session
+from app import crud
+
 
 router = APIRouter()
 
@@ -13,11 +16,7 @@ async def create_todo(
     todo_in: TodoCreate,
     db_session: Session = Depends(get_session),
 ) -> Todo:
-    todo = Todo(**todo_in.dict())
-    db_session.add(todo)
-    db_session.commit()
-    db_session.refresh(todo)
-
+    todo = crud.todo.create(db=db_session, obj_in=todo_in)
     return todo
 
 
@@ -25,7 +24,7 @@ async def create_todo(
 async def get_todo(
     db_session: Session = Depends(get_session),
 ) -> List[Todo]:
-    todos = db_session.exec(select(Todo)).unique().all()
+    todos = crud.todo.get_multi(db=db_session, skip=0, limit=100)
     return todos
 
 
@@ -35,18 +34,12 @@ async def update_todo(
     todo_in: TodoCreate,
     db_session: Session = Depends(get_session),
 ) -> Todo:
-    todo = db_session.exec(select(Todo).where(Todo.id == todo_id)).first()
+    todo = crud.todo.get(db=db_session, id=todo_id)
 
     if not todo:
         raise HTTPException(status_code=404, detail="Todo item not found")
 
-    for key, value in todo_in.dict().items():
-        setattr(todo, key, value)
-
-    db_session.add(todo)
-    db_session.commit()
-    db_session.refresh(todo)
-
+    todo = crud.todo.update(db=db_session, db_obj=todo, obj_in=todo_in)
     return todo
 
 
@@ -55,12 +48,5 @@ async def delete_todo(
     todo_id: int,
     db_session: Session = Depends(get_session),
 ) -> None:
-    todo = db_session.exec(select(Todo).where(Todo.id == todo_id)).first()
-
-    if not todo:
-        raise HTTPException(status_code=404, detail="Todo item not found")
-
-    db_session.delete(todo)
-    db_session.commit()
-
+    crud.todo.remove(db=db_session, id=todo_id)
     return None

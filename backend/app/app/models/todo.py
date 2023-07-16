@@ -1,12 +1,13 @@
-from typing import Optional
 from datetime import datetime
+from typing import Optional
+
 from pydantic import BaseModel
-from sqlmodel import SQLModel, Field
+from sqlmodel import Field, SQLModel
 
 
 class TodoBase(BaseModel):
     title: str
-    description: Optional[str] = None
+    description: str | None = None
 
 
 class TodoCreate(TodoBase):
@@ -14,14 +15,15 @@ class TodoCreate(TodoBase):
 
 
 class TodoUpdate(BaseModel):
-    title: Optional[str] = None
-    description: Optional[str] = None
+    title: str | None = None
+    description: str | None = None
 
 
-class Todo(TodoBase, SQLModel, table=True):
+class Todo(
+    TodoBase,
+    SQLModel,
+    table=True,
+):
     __tablename__ = "todos"
-    # sequence as primary key,
-    # more info at
-    # https://sqlmodel.tiangolo.com/tutorial/automatic-id-none-refresh/
     id: Optional[int] = Field(default=None, primary_key=True)
     created_on: datetime = Field(default_factory=datetime.utcnow)
