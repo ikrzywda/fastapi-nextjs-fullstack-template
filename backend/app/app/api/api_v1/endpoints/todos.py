@@ -1,7 +1,7 @@
 from typing import List
 from fastapi import APIRouter, Depends, HTTPException
 from sqlmodel import Session, select
-from core.db import get_session
+from app.core.db import get_session
 
 from models.todo import Todo, TodoCreate
 

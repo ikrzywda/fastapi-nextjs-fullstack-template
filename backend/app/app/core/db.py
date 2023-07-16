@@ -1,4 +1,4 @@
-from core.config import settings
+from app.core.config import settings
 from sqlmodel import Session, create_engine
 
 DB_ENGINE = create_engine(settings.POSTGRES_DB_URI)
