@@ -1,4 +1,4 @@
-from api.api_v1.api_v1 import api_v1_router
+from api.v1.api_v1 import api_v1_router
 from fastapi import APIRouter
 from core.config import settings
 

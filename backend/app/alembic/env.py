@@ -10,7 +10,7 @@ from sqlmodel import SQLModel
 
 # you need to import your models here so Alembic knows about them
 # and properly generates migrations for them
-from app.models.todo import Todo  # noqa
+import app.models.base  # noqa
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
