@@ -1,4 +1,5 @@
 from datetime import datetime
+from enum import Enum
 from typing import Optional
 
 from pydantic import BaseModel
@@ -31,3 +32,10 @@ class TodoList(TodoListBase, table=True):
     updated_date: datetime = Field(
         sa_column=(DateTime(timezone=True)), default_factory=datetime.utcnow
     )
+
+
+class TodoListSortingFields(str, Enum):
+    id = "id"
+    title = "title"
+    created_date = "created_date"
+    updated_date = "updated_date"
