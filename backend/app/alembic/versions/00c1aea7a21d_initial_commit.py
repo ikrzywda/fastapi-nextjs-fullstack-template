@@ -36,7 +36,9 @@ def upgrade() -> None:
         "todo_list",
         sa.Column("user_id", sa.Integer(), nullable=True),
         sa.Column("title", sqlmodel.sql.sqltypes.AutoString(), nullable=False),
-        sa.Column("description", sqlmodel.sql.sqltypes.AutoString(), nullable=False),
+        sa.Column(
+            "description", sqlmodel.sql.sqltypes.AutoString(), nullable=False
+        ),
         sa.Column("id", sa.Integer(), nullable=False),
         sa.Column("created_date", sa.DateTime(), nullable=False),
         sa.Column("updated_date", sa.DateTime(), nullable=False),
@@ -53,7 +55,9 @@ def upgrade() -> None:
         sa.Column("id", sa.Integer(), nullable=False),
         sa.Column("created_date", sa.DateTime(), nullable=False),
         sa.Column("updated_date", sa.DateTime(), nullable=False),
-        sa.ForeignKeyConstraint(["todo_list_id"], ["todo_list.id"], ondelete="CASCADE"),
+        sa.ForeignKeyConstraint(
+            ["todo_list_id"], ["todo_list.id"], ondelete="CASCADE"
+        ),
         sa.PrimaryKeyConstraint("id"),
     )
     # ### end Alembic commands ###

@@ -14,6 +14,7 @@ class UserBase(SQLModel):
 
 class UserCreate(BaseModel):
     email: EmailStr
+    username: str
     password: str
     is_superuser: bool = False
 

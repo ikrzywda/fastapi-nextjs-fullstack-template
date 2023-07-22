@@ -11,8 +11,13 @@ class Settings(BaseSettings):
     POSTGRES_DB: str
     POSTGRES_DB_URI: Optional[PostgresDsn] = None
 
+    ID_TOKEN_EXPIRATION_MINUTES: int = 60 * 24  # 60 minutes * 24 hours = 1 day
+    SECRET_KEY: str = "secret"
+
     @validator("POSTGRES_DB_URI", pre=True)
-    def assemble_db_connection(cls, v: Optional[str], values: Dict[str, Any]) -> Any:
+    def assemble_db_connection(
+        cls, v: Optional[str], values: Dict[str, Any]
+    ) -> Any:
         if isinstance(v, str):
             return v
         return PostgresDsn.build(
