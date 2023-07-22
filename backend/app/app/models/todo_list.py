@@ -27,10 +27,10 @@ class TodoList(TodoListBase, table=True):
         default=None, sa_column=Column(ForeignKey("user.id", ondelete="CASCADE"))
     )
     created_date: datetime = Field(
-        sa_column=(DateTime(timezone=True)), default_factory=datetime.utcnow
+        sa_column=Column(DateTime(timezone=True)), default_factory=datetime.utcnow
     )
     updated_date: datetime = Field(
-        sa_column=(DateTime(timezone=True)), default_factory=datetime.utcnow
+        sa_column=Column(DateTime(timezone=True)), default_factory=datetime.utcnow
     )
 
 

@@ -1,4 +1,4 @@
-from typing import Any, Dict, Generic, List, Type, TypeVar
+from typing import Any, Dict, Generic, Optional, Type, TypeVar
 
 from fastapi.encoders import jsonable_encoder
 from pydantic import BaseModel
@@ -29,7 +29,7 @@ class CRUDBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
         return getattr(self.model, sorting_key).desc()
 
     def get(self, db: Session, id: Any) -> ModelType | None:
-        return db.exec(select(self.model).filter(self.model.id == id)).first()
+        return db.exec(select(self.model).where(self.model.id == id)).first()
 
     def get_paginated(
         self, db: Session, *, page: int, per_page: int
@@ -69,8 +69,8 @@ class CRUDBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
         db.refresh(db_obj)
         return db_obj
 
-    def remove(self, db: Session, *, id: int) -> ModelType:
-        obj = db.query(self.model).get(id)
+    def remove(self, db: Session, *, id: int) -> Optional[ModelType]:
+        obj = db.exec(select(self.model).where(self.model.id == id)).first()
         db.delete(obj)
         db.commit()
         return obj

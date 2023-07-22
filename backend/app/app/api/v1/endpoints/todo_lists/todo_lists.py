@@ -1,6 +1,6 @@
 from typing import Optional
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException
 from sqlmodel import Session
 
 from app.core.db import get_session
@@ -44,3 +44,27 @@ async def get_todo_lists(
         sorting_key=sorting_key,
         sorting_order=sorting_order,
     )
+
+
+@router.delete("/{todo_list_id}", response_model=None)
+async def delete_todo_list(
+    todo_list_id: int,
+    db_session: Session = Depends(get_session),
+    user: User = Depends(get_current_user),
+) -> None:
+    todo_list = crud_todo_list.get(db_session, id=todo_list_id)
+
+    if not todo_list:
+        raise HTTPException(
+            status_code=404,
+            detail="Todo list not found",
+        )
+
+    if todo_list.user_id != user.id:
+        raise HTTPException(
+            status_code=403,
+            detail="You don't have permissions to delete this todo list",
+        )
+
+    crud_todo_list.remove_for_user(db_session, id=todo_list_id)
+    return None

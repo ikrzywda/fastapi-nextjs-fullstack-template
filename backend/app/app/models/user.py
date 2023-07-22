@@ -29,8 +29,8 @@ class User(UserBase, table=True):
     __tablename__ = "user"
     id: Optional[int] = Field(default=None, primary_key=True)
     created_date: datetime = Field(
-        sa_column=(DateTime(timezone=True)), default_factory=datetime.utcnow
+        sa_column=Column(DateTime(timezone=True)), default_factory=datetime.utcnow
     )
     updated_date: datetime = Field(
-        sa_column=(DateTime(timezone=True)), default_factory=datetime.utcnow
+        sa_column=Column(DateTime(timezone=True)), default_factory=datetime.utcnow
     )

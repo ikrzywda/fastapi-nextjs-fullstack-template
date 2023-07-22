@@ -1,9 +1,15 @@
-from app.core.config import settings
+from typing import AsyncGenerator
+
 from sqlmodel import Session, create_engine
 
-DB_ENGINE = create_engine(settings.POSTGRES_DB_URI)
+from app.core.config import settings
+
+DB_ENGINE = create_engine(str(settings.POSTGRES_DB_URI))
 
 
-async def get_session():
-    with Session(DB_ENGINE) as session:
-        yield session
+async def get_session() -> AsyncGenerator[Session, None]:
+    try:
+        db = Session(DB_ENGINE)
+        yield db
+    finally:
+        db.close()

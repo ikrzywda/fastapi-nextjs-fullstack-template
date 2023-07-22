@@ -1,14 +1,14 @@
 from typing import Any, Optional, Dict
-from pydantic import BaseSettings, PostgresDsn, validator
+from pydantic import BaseSettings, Field, PostgresDsn, validator
 
 
 class Settings(BaseSettings):
     API_V1_STR: str = "/api/v1"
     PROJECT_NAME: str = "FastAPI Template"
-    POSTGRES_SERVER: str
-    POSTGRES_USER: str
-    POSTGRES_PASSWORD: str
-    POSTGRES_DB: str
+    POSTGRES_SERVER: str = Field(..., env="POSTGRES_SERVER")
+    POSTGRES_USER: str = Field(..., env="POSTGRES_USER")
+    POSTGRES_PASSWORD: str = Field(..., env="POSTGRES_PASSWORD")
+    POSTGRES_DB: str = Field(..., env="POSTGRES_DB")
     POSTGRES_DB_URI: Optional[PostgresDsn] = None
 
     ID_TOKEN_EXPIRATION_MINUTES: int = 60 * 24  # 60 minutes * 24 hours = 1 day
@@ -32,4 +32,4 @@ class Settings(BaseSettings):
         env_file = "../.env"
 
 
-settings = Settings()
+settings: Settings = Settings()

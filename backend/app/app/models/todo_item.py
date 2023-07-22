@@ -1,8 +1,9 @@
 from datetime import datetime
+from enum import Enum
 from typing import Optional
 
 from pydantic import BaseModel
-from sqlmodel import Field, ForeignKey, SQLModel, Column, DateTime
+from sqlmodel import Column, DateTime, Field, ForeignKey, SQLModel
 
 
 class TodoItemBase(SQLModel):
@@ -33,8 +34,17 @@ class TodoItem(TodoItemBase, table=True):
         sa_column=Column(ForeignKey("todo_list.id", ondelete="CASCADE")),
     )
     created_date: datetime = Field(
-        sa_column=(DateTime(timezone=True)), default_factory=datetime.utcnow
+        sa_column=Column(DateTime(timezone=True)), default_factory=datetime.utcnow
     )
     updated_date: datetime = Field(
-        sa_column=(DateTime(timezone=True)), default_factory=datetime.utcnow
+        sa_column=Column(DateTime(timezone=True)), default_factory=datetime.utcnow
     )
+
+
+class TodoItemSortingFields(str, Enum):
+    id = "id"
+    title = "title"
+    created_date = "created_date"
+    updated_date = "updated_date"
+    due_date = "due_date"
+    is_completed = "is_completed"

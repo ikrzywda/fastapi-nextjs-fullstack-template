@@ -1,8 +1,8 @@
 from typing import Optional
 
-from sqlmodel import and_, func, select
-from app.crud.base import CRUDBase
+from sqlmodel import Session, and_, func, select
 
+from app.crud.base import CRUDBase
 from app.models.todo_list import (
     TodoList,
     TodoListCreate,
@@ -15,7 +15,7 @@ from app.schamas.paginated_response import PaginatedResponse, SortingOrder
 class CrudTodoList(CRUDBase[TodoList, TodoListCreate, TodoListUpdate]):
     def get_for_user_paginated(
         self,
-        db,
+        db: Session,
         *,
         user_id: int,
         page: int,
@@ -23,8 +23,8 @@ class CrudTodoList(CRUDBase[TodoList, TodoListCreate, TodoListUpdate]):
         search: Optional[str] = None,
         sorting_key: TodoListSortingFields,
         sorting_order: SortingOrder,
-    ):
-        query = select(TodoList).filter(
+    ) -> PaginatedResponse[TodoList]:
+        query = select(TodoList).where(
             and_(
                 TodoList.user_id == user_id,
                 TodoList.title.ilike(f"%{search}%" if search else "%"),
@@ -47,8 +47,21 @@ class CrudTodoList(CRUDBase[TodoList, TodoListCreate, TodoListUpdate]):
             items=items, total=all_count, page=page, per_page=per_page
         )
 
+    def get_for_user(
+        self,
+        db: Session,
+        *,
+        id: int,
+        user_id: int,
+    ) -> Optional[TodoList]:
+        query = select(TodoList).where(
+            and_(TodoList.id == id, TodoList.user_id == user_id)
+        )
+        items = db.exec(query).first()
+        return items
+
     def create_for_user(
-        self, db, *, obj_in: TodoListCreate, user_id: int
+        self, db: Session, *, obj_in: TodoListCreate, user_id: int
     ) -> TodoList:
         todo_list = TodoList(**obj_in.dict(), user_id=user_id)
         db.add(todo_list)
