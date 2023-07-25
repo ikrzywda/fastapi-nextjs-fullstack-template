@@ -31,7 +31,7 @@ async def get_todo_lists(
     page_size: int = 10,
     search: Optional[str] = None,
     sorting_order: SortingOrder = SortingOrder.asc,
-    sorting_key: TodoListSortingFields = TodoListSortingFields.id,
+    sorting_key: TodoListSortingFields = "id",
     db_session: Session = Depends(get_session),
     user: User = Depends(get_current_user),
 ) -> PaginatedResponse[TodoList]:
@@ -66,5 +66,5 @@ async def delete_todo_list(
             detail="You don't have permissions to delete this todo list",
         )
 
-    crud_todo_list.remove_for_user(db_session, id=todo_list_id)
+    crud_todo_list.remove(db_session, id=todo_list_id)
     return None

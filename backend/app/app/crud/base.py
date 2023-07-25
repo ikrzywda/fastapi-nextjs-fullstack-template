@@ -1,12 +1,14 @@
-from typing import Any, Dict, Generic, Optional, Type, TypeVar
+from typing import Any, Dict, Generic, Optional, Type, TypeVar, Union
 
 from fastapi.encoders import jsonable_encoder
 from pydantic import BaseModel
 from sqlmodel import Session, SQLModel, func, select
+from app.models.base_model import BaseDBModel
 
 from app.schamas.paginated_response import PaginatedResponse
 
-ModelType = TypeVar("ModelType", bound=SQLModel)
+
+ModelType = TypeVar("ModelType", bound=BaseDBModel)
 CreateSchemaType = TypeVar("CreateSchemaType", bound=BaseModel)
 UpdateSchemaType = TypeVar("UpdateSchemaType", bound=BaseModel)
 
@@ -21,7 +23,7 @@ class CRUDBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
         * `model`: A SQLModel model class
         * `schema`: A Pydantic (or SQLModel) class
         """
-        self.model = model
+        self.model = model  # type: ignore
 
     def get_order_by_expression(self, sorting_key: str, sorting_order: str) -> Any:
         if sorting_order == "asc":

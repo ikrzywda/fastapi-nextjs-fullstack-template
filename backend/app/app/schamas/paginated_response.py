@@ -1,11 +1,11 @@
 from enum import Enum
 from typing import Generic, List, TypeVar
 
-from pydantic import BaseModel
 from pydantic.generics import GenericModel
-from sqlmodel import SQLModel
+from app.models.base_model import BaseDBModel
 
-ModelType = TypeVar("ModelType", bound=BaseModel | SQLModel)
+
+ModelType = TypeVar("ModelType", bound=BaseDBModel, covariant=True)
 
 
 class SortingOrder(str, Enum):

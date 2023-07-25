@@ -17,7 +17,7 @@ class CrudTodoList(CRUDBase[TodoList, TodoListCreate, TodoListUpdate]):
         self,
         db: Session,
         *,
-        user_id: int,
+        user_id: int | None,
         page: int,
         per_page: int,
         search: Optional[str] = None,
@@ -27,7 +27,7 @@ class CrudTodoList(CRUDBase[TodoList, TodoListCreate, TodoListUpdate]):
         query = select(TodoList).where(
             and_(
                 TodoList.user_id == user_id,
-                TodoList.title.ilike(f"%{search}%" if search else "%"),
+                TodoList.title.ilike(f"%{search}%" if search else "%"),  # type: ignore
             )
         )
         skip = (page - 1) * per_page
@@ -52,7 +52,7 @@ class CrudTodoList(CRUDBase[TodoList, TodoListCreate, TodoListUpdate]):
         db: Session,
         *,
         id: int,
-        user_id: int,
+        user_id: int | None,
     ) -> Optional[TodoList]:
         query = select(TodoList).where(
             and_(TodoList.id == id, TodoList.user_id == user_id)
@@ -61,7 +61,7 @@ class CrudTodoList(CRUDBase[TodoList, TodoListCreate, TodoListUpdate]):
         return items
 
     def create_for_user(
-        self, db: Session, *, obj_in: TodoListCreate, user_id: int
+        self, db: Session, *, obj_in: TodoListCreate, user_id: int | None
     ) -> TodoList:
         todo_list = TodoList(**obj_in.dict(), user_id=user_id)
         db.add(todo_list)

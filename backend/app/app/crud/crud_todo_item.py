@@ -27,7 +27,7 @@ class CRUDTodoItem(CRUDBase[TodoItem, TodoItemCreate, TodoItemUpdate]):
         query = select(TodoItem).where(
             and_(
                 TodoItem.todo_list_id == todo_list_id,
-                TodoItem.title.like(f"%{search}%" if search else "%"),
+                TodoItem.title.ilike(f"%{search}%" if search else "%"),  # type: ignore
             )
         )
         skip = (page - 1) * per_page
@@ -58,7 +58,7 @@ class CRUDTodoItem(CRUDBase[TodoItem, TodoItemCreate, TodoItemUpdate]):
         return items
 
     def create_for_list(
-        self, db, *, obj_in: TodoItemCreate, todo_list_id: int
+        self, db: Session, *, obj_in: TodoItemCreate, todo_list_id: int
     ) -> TodoItem:
         todo_item = TodoItem(**obj_in.dict(), todo_list_id=todo_list_id)
         db.add(todo_item)

@@ -48,7 +48,7 @@ async def get_todo_items(
     page_size: int = 10,
     search: Optional[str] = None,
     sorting_order: SortingOrder = SortingOrder.asc,
-    sorting_key: TodoItemSortingFields = TodoItemSortingFields.id,
+    sorting_key: TodoItemSortingFields = "id",
     db_session: Session = Depends(get_session),
     user: User = Depends(get_current_user),
 ) -> PaginatedResponse[TodoItem]:

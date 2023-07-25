@@ -1,22 +1,20 @@
 from datetime import datetime
-from enum import Enum
-from typing import Optional
+from enum import Enum, unique
+from typing import Literal, Optional
 
 from pydantic import BaseModel
 from sqlmodel import Column, DateTime, Field, ForeignKey, SQLModel
 
+from app.models.base_model import BaseDBModel
 
-class TodoItemBase(SQLModel):
+
+class TodoItemCreate(BaseModel):
     title: str
     description: Optional[str] = None
     is_completed: bool = False
     due_date: Optional[datetime] = Field(
         sa_column=Column(DateTime(timezone=True)), default=None
     )
-
-
-class TodoItemCreate(TodoItemBase):
-    pass
 
 
 class TodoItemUpdate(BaseModel):
@@ -26,9 +24,15 @@ class TodoItemUpdate(BaseModel):
     is_completed: Optional[bool] = None
 
 
-class TodoItem(TodoItemBase, table=True):
+class TodoItem(BaseDBModel, table=True):
     __tablename__ = "todo_item"
     id: Optional[int] = Field(default=None, primary_key=True)
+    title: str
+    description: Optional[str] = None
+    is_completed: bool = False
+    due_date: Optional[datetime] = Field(
+        sa_column=Column(DateTime(timezone=True)), default=None
+    )
     todo_list_id: Optional[int] = Field(
         default=None,
         sa_column=Column(ForeignKey("todo_list.id", ondelete="CASCADE")),
@@ -41,10 +45,4 @@ class TodoItem(TodoItemBase, table=True):
     )
 
 
-class TodoItemSortingFields(str, Enum):
-    id = "id"
-    title = "title"
-    created_date = "created_date"
-    updated_date = "updated_date"
-    due_date = "due_date"
-    is_completed = "is_completed"
+TodoItemSortingFields = Literal["id", "title", "created_date", "updated_date"]

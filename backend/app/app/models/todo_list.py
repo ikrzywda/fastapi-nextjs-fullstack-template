@@ -1,18 +1,16 @@
 from datetime import datetime
 from enum import Enum
-from typing import Optional
+from typing import Literal, Optional
 
 from pydantic import BaseModel
 from sqlmodel import Column, DateTime, Field, ForeignKey, SQLModel
 
+from app.models.base_model import BaseDBModel
 
-class TodoListBase(SQLModel):
+
+class TodoListCreate(BaseModel):
     title: str
     description: str
-
-
-class TodoListCreate(TodoListBase):
-    pass
 
 
 class TodoListUpdate(BaseModel):
@@ -20,12 +18,14 @@ class TodoListUpdate(BaseModel):
     description: Optional[str] = None
 
 
-class TodoList(TodoListBase, table=True):
+class TodoList(BaseDBModel, table=True):
     __tablename__ = "todo_list"
     id: Optional[int] = Field(default=None, primary_key=True)
     user_id: Optional[int] = Field(
         default=None, sa_column=Column(ForeignKey("user.id", ondelete="CASCADE"))
     )
+    title: str
+    description: str
     created_date: datetime = Field(
         sa_column=Column(DateTime(timezone=True)), default_factory=datetime.utcnow
     )
@@ -34,8 +34,4 @@ class TodoList(TodoListBase, table=True):
     )
 
 
-class TodoListSortingFields(str, Enum):
-    id = "id"
-    title = "title"
-    created_date = "created_date"
-    updated_date = "updated_date"
+TodoListSortingFields = Literal["id", "title", "created_date", "updated_date"]
