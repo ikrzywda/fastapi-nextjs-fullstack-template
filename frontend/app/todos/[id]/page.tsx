@@ -1,5 +1,9 @@
+"use client";
+
+import TodoList from "app/components/TodoList";
+
 const TodoListPage = ({ params }: { params: { id: number } }) => {
-  return <div>Todo List {params.id}</div>;
+  return <TodoList todoListId={params.id} />;
 };
 
 export default TodoListPage;
