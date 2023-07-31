@@ -1,10 +1,14 @@
-/* Components */
-import { Counter } from './components/Counter/Counter'
+import Login from "app/login/page";
 
+/* Components */
 export default function IndexPage() {
-  return <Counter />
+  return (
+    <>
+      <Login />
+    </>
+  );
 }
 
 export const metadata = {
-  title: 'Redux Toolkit',
-}
+  title: "Redux Toolkit",
+};

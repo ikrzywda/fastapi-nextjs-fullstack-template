@@ -14,7 +14,7 @@ import {
 /* Instruments */
 import { reducer } from "./rootReducer";
 import { middleware } from "./middleware";
-import { emptySplitApi } from "./api/emptyApi";
+import { emptySlitApi } from "./api/emptyApi";
 
 const configureStoreDefaultOptions: ConfigureStoreOptions = { reducer };
 
@@ -28,11 +28,11 @@ export const makeReduxStore = (
 
 export const reduxStore = configureStore({
   reducer,
-  [emptySplitApi.reducerPath]: emptySplitApi.reducer,
+  [emptySlitApi.reducerPath]: emptySlitApi.reducer,
   middleware: (getDefaultMiddleware) => {
     return getDefaultMiddleware()
       .concat(middleware)
-      .concat(emptySplitApi.middleware);
+      .concat(emptySlitApi.middleware);
   },
 });
 export const useDispatch = () => useReduxDispatch<ReduxDispatch>();

@@ -5,10 +5,16 @@ const config: ConfigFile = {
   apiFile: "./lib/redux/api/emptyApi.ts",
   apiImport: "emptySlitApi",
   exportName: "api",
-  hooks: true,
+  hooks: { queries: true, lazyQueries: true, mutations: true },
   outputFiles: {
-    "./lib/redux/api/todos.ts": {
-      filterEndpoints: [/todos/i],
+    "./lib/redux/api/todoLists.ts": {
+      filterEndpoints: (endpoint) => endpoint.includes("TodoList"),
+    },
+    "./lib/redux/api/users.ts": {
+      filterEndpoints: (endpoint) => endpoint.includes("User"),
+    },
+    "./lib/redux/api/login.ts": {
+      filterEndpoints: (endpoint) => endpoint.includes("Login"),
     },
   },
 };
