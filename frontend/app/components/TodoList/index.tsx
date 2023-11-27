@@ -1,9 +1,4 @@
-import {
-  useGetTodoItemsApiV1TodoListsTodoListIdItemsGetQuery,
-  useGetTodoListsApiV1TodoListsGetQuery,
-  useLazyGetTodoItemsApiV1TodoListsTodoListIdItemsGetQuery,
-} from "@/lib/redux/api/todoLists";
-import TodoListItem from "../TodoLists/TodoListItem";
+import { useGetTodoItemsApiV1TodoListsTodoListIdItemsGetQuery } from "@/lib/redux/api/todoLists";
 import { Typography } from "@mui/material";
 
 interface Props {

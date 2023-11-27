@@ -1,15 +1,23 @@
 "use client";
 
-import { Button, Stack, TextField, Typography } from "@mui/material";
+import {
+  Button,
+  Grid,
+  Stack,
+  TextField,
+  ThemeProvider,
+  Typography,
+} from "@mui/material";
 import { login } from "app/services/login";
 import { useState } from "react";
+import LoginForm from "../components/Login/LoginForm";
+import { theme } from "../styles/theme";
+import Title from "../components/Login/Title";
 
 const Login = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
   const [authError, setAuthError] = useState(false);
 
-  const handleLogin = async () => {
+  const handleLogin = async (email: string, password: string) => {
     const { error } = await login(email, password);
     if (error) {
       setAuthError(true);
@@ -19,25 +27,23 @@ const Login = () => {
 
   return (
     <>
-      <Stack spacing={2}>
-        <Typography variant="h1">Hello 👋</Typography>
-        <Stack spacing={2}>
-          <TextField
-            label="Email"
-            onChange={(e) => setEmail(e.currentTarget.value)}
-          />
-          <TextField
-            label="Password"
-            onChange={(e) => setPassword(e.currentTarget.value)}
-          />
-          {authError && (
-            <Typography color="error">Failed to authenticate</Typography>
-          )}
-          <Button variant="contained" onClick={handleLogin}>
-            Login
-          </Button>
-        </Stack>
-      </Stack>
+      <Grid
+        container
+        spacing={5}
+        columns={12}
+        alignItems="center"
+        sx={{ minHeight: "100vh" }}
+      >
+        <Grid item xs={8}>
+          <Title />
+        </Grid>
+        <Grid item xs={4}>
+          <LoginForm onLogin={handleLogin} />
+        </Grid>
+      </Grid>
+      {authError && (
+        <Typography color="error">Failed to authenticate</Typography>
+      )}
     </>
   );
 };

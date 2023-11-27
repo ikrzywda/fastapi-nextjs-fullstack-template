@@ -7,12 +7,13 @@ license = "MIT"
 readme = "README.md"
 
 [tool.poetry.dependencies]
+greenlet = "*"
 python = "^3.11"
 fastapi = "^0.98.0"
 pydantic = {version = "^1.10.9", extras = ["email"]}
 alembic = "^1.11.1"
 sqlmodel = "^0.0.8"
-psycopg2-binary = "^2.9.6"
+psycopg2-binary = "^2.9.9"
 requests = "^2.31.0"
 SQLAlchemy = "^1.4.41"
 uvicorn = "^0.22.0"

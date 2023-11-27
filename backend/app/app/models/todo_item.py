@@ -1,9 +1,8 @@
 from datetime import datetime
-from enum import Enum, unique
 from typing import Literal, Optional
 
 from pydantic import BaseModel
-from sqlmodel import Column, DateTime, Field, ForeignKey, SQLModel
+from sqlmodel import Column, DateTime, Field, ForeignKey
 
 from app.models.base_model import BaseDBModel
 

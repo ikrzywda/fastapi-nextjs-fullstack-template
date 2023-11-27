@@ -1,7 +1,5 @@
-import { Box, Stack, Typography } from "@mui/material";
+import { Box, Stack } from "@mui/material";
 import TodoLists from "../components/TodoLists";
-
-const testData = ["todo-1", "todo-2", "todo-3", "todo-4", "todo-5", "todo-6"];
 
 const TodosLayout = ({ children }: React.PropsWithChildren) => {
   return (
